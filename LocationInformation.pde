@@ -17,10 +17,20 @@ String locationName = "test";
 void displayInfo() {
  stroke(0);
   textFont(f,16);                 
-  fill(0);                     
+  fill(255);                     
   text(locationDescription, width-280, height-60);
   text(locationDate, width-280, height-40);
   text(locationName, width-280, height-20);
   image(locationPhoto, width-460, height-130, locationPhoto.width/20, locationPhoto.height/20);
  }
-}
+ 
+ void stopDisplayInfo(UnfoldingMap mapCPY) {
+   if(mapCPY.getZoomLevel()>9){
+     locationDescription = "";
+     locationDate = "";
+     locationName = "";
+     locationPhoto = null;
+   }
+     } 
+ }
+
