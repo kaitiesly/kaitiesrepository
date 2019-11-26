@@ -50,11 +50,14 @@ class PointOfInterest {
     //if its audio is playing, display SoundWave
     if (currentPlayer.isPlaying()){
       ScreenPosition pos = mapCPY.getScreenPosition(pointLocation);
-      soundWave.draw(pos.x, pos.y,currentPlayer, currentPlayer.state);
+      soundWave.draw(pos.x, pos.y,currentPlayer, state);
         // Add markers to the map
       mapCPY.addMarkers();
     } 
   }
+  
+  // this makes the currentPlayer depend on which state is toggled. It will choose the normal
+  // player, the InfraPlayer or the UltraPlayer depending on what is toggled. 
   void toggleState(){    
     state =(state+1)%3;
     stopSound();

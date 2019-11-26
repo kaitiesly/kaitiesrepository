@@ -14,20 +14,19 @@ float dt = 0.01;
 
 public SoundWave(AudioPlayer audioPlayer)
 {
-//  size(displayWidth, displayHeight);
-  //size(600, 400);
+
   minim = new Minim(this);
   player = audioPlayer;
   meta = player.getMetaData();
   beat = new BeatDetect();
-  //player.play();
-//  background(-1);
+
 }
 
 public void draw(float xPos, float yPos, AudioPlayer audioPlayer, int state)
 { 
   player = audioPlayer;
-  
+  // the states are for the different type of visualizations for the audio
+  // this state is for the ultrasonic visualization
   if(state == 2){
     int r = 20 + (int)(15* currentSoundVolume);
     beat.detect(player.mix);
@@ -70,6 +69,8 @@ public void draw(float xPos, float yPos, AudioPlayer audioPlayer, int state)
     noStroke();
     
   }
+  
+  //here is the visualization for infrasound
   else if(state == 1){
     time += dt;
     stroke(0,0,255);
@@ -79,7 +80,7 @@ public void draw(float xPos, float yPos, AudioPlayer audioPlayer, int state)
     float r= height/10;
     float pie = 3.1415927;
     
-    
+    int bsize = player.bufferSize();
     translate(xPos, yPos);
     for(int i=8; i<16 ; i++){
       beginShape();
@@ -88,13 +89,14 @@ public void draw(float xPos, float yPos, AudioPlayer audioPlayer, int state)
         
         float x2 = (r + player.left.get(i)*100)*cos(i*2*PI/bsize);
         float y2 = (r + player.left.get(i)*100)*sin(i*2*PI/bsize);   
-        
         float drift = (noise(r*cos(alpha)/300,r*sin(alpha)/300,time)-0.5)*750;
         vertex((r +drift+ player.left.get(i)*100)*cos(alpha),(r + drift + player.left.get(i)*100)*sin(alpha));
       }  
      endShape();
+    }
   }
-  }
+  
+  //here is the last visualization for audible sound
   else if(state == 0){
   time += dt;
   stroke(0,0,255);
@@ -103,32 +105,22 @@ public void draw(float xPos, float yPos, AudioPlayer audioPlayer, int state)
   
   float r= height/10;
   float pie = 3.1415927;
-  
+  int bsize = player.bufferSize();
   translate(xPos, yPos);
   for(int i=8; i<16 ; i++){
     beginShape();
     for(float alpha=0; alpha<=2*pie; alpha+=pie/i){
-      stroke(165,255,255,150/i);
+      stroke(255, 179, 165,240/i);
       
       float x2 = (r + player.left.get(i)*100)*cos(i*2*PI/bsize);
       float y2 = (r + player.left.get(i)*100)*sin(i*2*PI/bsize);   
       
       float drift = (noise(x2,y2,time)-0.5)*750;
-//      vertex((r +drift+ player.left.get(i)*100)*cos(alpha),(r + drift + player.left.get(i)*100)*sin(alpha));
       vertex((r+drift)*cos(alpha),(r+drift)*sin(alpha));
     }  
      endShape();
-  }
-  
-  }
-
-  
-  //in main draw, when a point's soundWave is not there anymore, we don't want the fill and stroke remain on the position. 
-
+    }
+  } 
 }
-boolean sketchFullScreen() {
-  return true;
-}
-
 
 }
